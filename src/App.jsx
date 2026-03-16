@@ -74,7 +74,7 @@ function useReveal() {
     const el = ref.current;
     if (!el) { setV(true); return; }
     try {
-      const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setV(true); o.disconnect(); } }, { threshold: 0.05, rootMargin: "0px 0px 50px 0px" });
+      const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setV(true); o.disconnect(); } }, { threshold: 0.15 });
       o.observe(el);
       const fallback = setTimeout(() => setV(true), 2000);
       return () => { o.disconnect(); clearTimeout(fallback); };
@@ -210,8 +210,8 @@ function Sec({ id, children, bg }) {
   return (
     <section ref={ref} id={id} style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
       padding: "100px 28px", background: bg || P.bg, position: "relative", overflow: "hidden",
-      opacity: vis ? 1 : 0, transform: vis ? "translateY(0)" : "translateY(24px)",
-      transition: "opacity 0.7s ease-out, transform 0.7s ease-out" }}>
+      opacity: vis ? 1 : 0, transform: vis ? "translateY(0)" : "translateY(48px)",
+      transition: "opacity 0.9s ease-out, transform 0.9s ease-out" }}>
       {children}
     </section>
   );
