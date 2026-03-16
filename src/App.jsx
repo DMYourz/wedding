@@ -249,7 +249,7 @@ function Envelope({ onOpen }) {
             </svg>
           </div>
           {/* Wax seal */}
-          <div style={{ position: "absolute", bottom: 58, left: "50%", transform: "translateX(-50%)", zIndex: 3, pointerEvents: "none", transition: "opacity 0.4s ease", opacity: flapOpen ? 1 : 0.85 }}>
+          <div style={{ position: "absolute", bottom: 58, left: "50%", transform: "translateX(-50%)", zIndex: 6, pointerEvents: "none", transition: "opacity 0.4s ease", opacity: flapOpen ? 1 : 0.85 }}>
             <svg width="38" height="38" viewBox="0 0 38 38">
               <circle cx="19" cy="19" r="17" fill={P.burg} opacity="0.88" />
               <circle cx="19" cy="19" r="14" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="0.6" />
