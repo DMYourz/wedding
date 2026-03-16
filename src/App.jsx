@@ -67,6 +67,16 @@ function Head({ pre, title }) {
   );
 }
 
+function useIsMobile() {
+  const [m, setM] = useState(() => window.innerWidth < 600);
+  useEffect(() => {
+    const h = () => setM(window.innerWidth < 600);
+    window.addEventListener("resize", h);
+    return () => window.removeEventListener("resize", h);
+  }, []);
+  return m;
+}
+
 function useReveal() {
   const ref = useRef(null);
   const [v, setV] = useState(false);
@@ -102,7 +112,7 @@ function Countdown({ date }) {
     tick(); const i = setInterval(tick, 1000); return () => clearInterval(i);
   }, [date]);
   return (
-    <div style={{ display: "flex", justifyContent: "center", gap: 28, marginTop: 36, flexWrap: "wrap" }}>
+    <div style={{ display: "flex", justifyContent: "center", gap: "clamp(12px,4vw,28px)", marginTop: 36, flexWrap: "wrap" }}>
       {[["d","Days"],["h","Hours"],["m","Min"],["s","Sec"]].map(([k,l]) => (
         <div key={k} style={{ textAlign: "center" }}>
           <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 42, fontWeight: 500, color: P.burgDk, lineHeight: 1, minWidth: 52 }}>{String(t[k]).padStart(2,"0")}</div>
@@ -145,10 +155,25 @@ function RSVPForm() {
   };
 
   if (done) return (
-    <div style={{ textAlign: "center", padding: 52, background: P.ivory, border: `1px solid ${P.sageFa}`, borderRadius: 4, maxWidth: 440 }}>
-      <Icon type="envelope" size={36} />
-      <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, fontWeight: 500, fontStyle: "italic", color: P.burgDk, margin: "16px 0 0 0" }}>Thank You!</h3>
-      <p style={{ fontFamily: "'Lora', serif", fontSize: 14, color: P.inkF, marginTop: 12, lineHeight: 1.7 }}>We received your response and can't wait to celebrate with you.</p>
+    <div style={{ textAlign: "center", padding: "52px 40px", background: P.ivory, border: `1px solid ${P.sageFa}`, borderRadius: 4, maxWidth: 440, animation: "fadeInUp 0.8s ease-out" }}>
+      <svg width="52" height="52" viewBox="0 0 52 52" style={{ display:"block", margin:"0 auto 16px" }}>
+        <circle cx="26" cy="26" r="24" fill="none" stroke={P.burgFa} strokeWidth="1" />
+        <path d="M16 26l7 7 13-13" fill="none" stroke={P.burg} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+      <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 26, fontWeight: 500, fontStyle: "italic", color: P.burgDk, margin: "0 0 12px 0" }}>
+        {f.att === "yes" ? `We can't wait to see you!` : `We'll miss you dearly`}
+      </h3>
+      <p style={{ fontFamily: "'Lora', serif", fontSize: 15, color: P.inkS, lineHeight: 1.8 }}>
+        {f.att === "yes"
+          ? <>Thank you, <em>{f.name.split(" ")[0]}</em>. Your presence means everything to us. We'll see you on July 31st!</>
+          : <>Thank you, <em>{f.name.split(" ")[0]}</em>, for letting us know. You'll be in our hearts on our special day.</>}
+      </p>
+      {f.att === "yes" && (
+        <div style={{ marginTop: 24, padding: "16px 20px", background: `${P.burgFa}30`, borderRadius: 3, border: `0.5px solid ${P.burgFa}` }}>
+          <p style={{ fontFamily: "'Lora', serif", fontSize: 11, letterSpacing: 3, color: P.burgDk, textTransform: "uppercase", fontWeight: 600 }}>Friday · July 31, 2026</p>
+          <p style={{ fontFamily: "'Lora', serif", fontSize: 13, color: P.inkF, marginTop: 6 }}>Sarasota County Courthouse → Terra Gaucha, Tampa</p>
+        </div>
+      )}
     </div>
   );
   return (
@@ -185,22 +210,130 @@ function Envelope({ onOpen }) {
   const go = () => { if (flapOpen) return; setFlapOpen(true); setTimeout(() => { setGone(true); onOpen(); }, 1000); };
   if (gone) return null;
   return (
-    <div onClick={go} style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column",
-      background: `radial-gradient(ellipse at 50% 40%, ${P.ivory}, ${P.parch})`, cursor: "pointer" }}>
-      <p style={{ fontFamily: "'Lora', serif", fontSize: 12, letterSpacing: 7, textTransform: "uppercase", color: P.burgDk, marginBottom: 44, fontWeight: 600 }}>You Are Cordially Invited</p>
-      <div style={{ position: "relative", width: 280, height: 210 }}>
-        <div style={{ position: "absolute", bottom: 0, width: "100%", height: 160, background: `linear-gradient(175deg, ${P.ivory}, ${P.parch})`, borderRadius: 4, boxShadow: `0 8px 28px rgba(114,47,55,0.08)`, border: `0.5px solid ${P.sageFa}` }} />
-        <div style={{ position: "absolute", bottom: flapOpen ? 95 : 28, left: 22, right: 22, height: 110, background: P.white, borderRadius: 2, border: `0.5px solid ${P.sageFa}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", transition: "bottom 0.7s ease-out" }}>
-          <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 10, letterSpacing: 4, textTransform: "uppercase", color: P.inkF, fontWeight: 500 }}>Save the Date</span>
-          <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontStyle: "italic", color: P.burgDk, marginTop: 3, fontWeight: 500 }}>D & E</span>
-          <span style={{ fontFamily: "'Lora', serif", fontSize: 10, letterSpacing: 3, color: P.sage, marginTop: 5, fontWeight: 600 }}>07 · 31 · 2026</span>
+    <div onClick={go} style={{ position: "fixed", inset: 0, zIndex: 200, cursor: "pointer", overflow: "hidden" }}>
+      {/* Tulip background */}
+      <img src="/Tulipanes.jpeg" alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 60%" }} />
+      {/* Gradient overlay — lighter at top, slightly deeper at bottom */}
+      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(12,10,8,0.25) 0%, rgba(12,10,8,0.52) 100%)" }} />
+
+      {/* Content */}
+      <div style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", gap: 0 }}>
+
+        {/* Text above envelope */}
+        <p style={{ fontFamily: "'Lora', serif", fontSize: 10, letterSpacing: 7, textTransform: "uppercase", color: "rgba(245,237,228,0.7)", fontWeight: 600, marginBottom: 14 }}>You are cordially invited</p>
+        <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(38px,8vw,62px)", fontStyle: "italic", fontWeight: 500, color: "#FFF9F5", lineHeight: 1.1, textAlign: "center", textShadow: "0 2px 28px rgba(0,0,0,0.28)", margin: 0 }}>Daniel & Edelys</p>
+        {/* Thin ornamental line */}
+        <svg width="160" height="20" viewBox="0 0 160 20" style={{ margin: "12px 0 6px" }}>
+          <line x1="0" y1="10" x2="68" y2="10" stroke="rgba(255,255,255,0.25)" strokeWidth="0.6" />
+          <circle cx="80" cy="10" r="2.5" fill="rgba(255,255,255,0.35)" />
+          <line x1="92" y1="10" x2="160" y2="10" stroke="rgba(255,255,255,0.25)" strokeWidth="0.6" />
+        </svg>
+        <p style={{ fontFamily: "'Lora', serif", fontSize: 11, letterSpacing: 5, color: "rgba(168,191,154,0.85)", fontWeight: 600, textTransform: "uppercase", marginBottom: 36 }}>July 31st · 2026</p>
+
+        {/* Clean envelope — no text inside */}
+        <div style={{ position: "relative", width: 300, height: 200, filter: "drop-shadow(0 16px 48px rgba(0,0,0,0.4))" }}>
+          {/* Body */}
+          <div style={{ position: "absolute", bottom: 0, width: "100%", height: 160, background: "rgba(252,249,245,0.92)", backdropFilter: "blur(8px)", borderRadius: 3, border: "0.5px solid rgba(255,255,255,0.6)" }} />
+          {/* Bottom V-fold */}
+          <div style={{ position: "absolute", bottom: 0, width: "100%", height: 160, borderRadius: 3, overflow: "hidden", pointerEvents: "none" }}>
+            <svg width="100%" height="100%" viewBox="0 0 300 160">
+              <path d="M0 160L150 75L300 160" fill="rgba(240,234,226,0.5)" />
+              <path d="M0 160L150 75L300 160" fill="none" stroke="rgba(200,190,178,0.4)" strokeWidth="0.5" />
+              <path d="M0 160L150 75" fill="none" stroke="rgba(200,190,178,0.3)" strokeWidth="0.4" />
+              <path d="M300 160L150 75" fill="none" stroke="rgba(200,190,178,0.3)" strokeWidth="0.4" />
+            </svg>
+          </div>
+          {/* Wax seal */}
+          <div style={{ position: "absolute", bottom: 58, left: "50%", transform: "translateX(-50%)", zIndex: 3, pointerEvents: "none" }}>
+            <svg width="38" height="38" viewBox="0 0 38 38">
+              <circle cx="19" cy="19" r="17" fill={P.burg} opacity="0.88" />
+              <circle cx="19" cy="19" r="14" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="0.6" />
+              <text x="19" y="23" textAnchor="middle" fill="rgba(255,249,245,0.9)" fontSize="11" fontFamily="'Playfair Display', serif" fontStyle="italic" fontWeight="500">D·E</text>
+            </svg>
+          </div>
+          {/* Flap */}
+          <div style={{ position: "absolute", top: flapOpen ? 18 : 42, left: 0, width: 0, height: 0,
+            borderLeft: "150px solid transparent", borderRight: "150px solid transparent",
+            borderTop: "80px solid rgba(245,241,236,0.93)",
+            transformOrigin: "top center",
+            transform: flapOpen ? "rotateX(180deg)" : "rotateX(0deg)",
+            transition: "transform 0.65s ease-out, top 0.3s ease",
+            filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.08))" }} />
         </div>
-        <div style={{ position: "absolute", bottom: 0, width: "100%", height: 160, borderRadius: 4, overflow: "hidden", pointerEvents: "none" }}>
-          <svg width="100%" height="100%" viewBox="0 0 280 160"><path d="M0 0L140 95L280 0" fill="none" stroke={P.sageFa} strokeWidth="0.5"/></svg>
-        </div>
-        <div style={{ position: "absolute", top: flapOpen ? 28 : 50, left: 0, width: 0, height: 0, borderLeft: "140px solid transparent", borderRight: "140px solid transparent", borderTop: `75px solid ${P.parch}`, transformOrigin: "top center", transform: flapOpen ? "rotateX(180deg)" : "rotateX(0deg)", transition: "transform 0.6s ease-out, top 0.3s ease" }} />
+
+        <p style={{ marginTop: 36, fontFamily: "'Lora', serif", fontSize: 10, letterSpacing: 6, color: "rgba(245,237,228,0.5)", textTransform: "uppercase", fontWeight: 600, animation: "pulse 2.5s ease-in-out infinite" }}>Tap to open</p>
       </div>
-      <p style={{ marginTop: 40, fontFamily: "'Lora', serif", fontSize: 11, letterSpacing: 4, color: P.sage, opacity: 0.7, textTransform: "uppercase", fontWeight: 600 }}>Tap to Open</p>
+    </div>
+  );
+}
+
+function Petals() {
+  const petals = [
+    {l:"8%",d:"0s",dur:"9s",s:9,r:20},{l:"18%",d:"1.5s",dur:"11s",s:7,r:80},
+    {l:"28%",d:"3s",dur:"8s",s:11,r:140},{l:"40%",d:"0.8s",dur:"12s",s:6,r:200},
+    {l:"52%",d:"2.2s",dur:"10s",s:10,r:260},{l:"63%",d:"4s",dur:"9s",s:8,r:320},
+    {l:"74%",d:"1s",dur:"11s",s:7,r:40},{l:"83%",d:"3.5s",dur:"8s",s:9,r:100},
+    {l:"91%",d:"0.5s",dur:"13s",s:6,r:160},{l:"47%",d:"5s",dur:"10s",s:8,r:220},
+    {l:"35%",d:"6s",dur:"9s",s:7,r:280},{l:"70%",d:"2.8s",dur:"12s",s:10,r:340},
+  ];
+  return (
+    <div style={{ position:"absolute", inset:0, overflow:"hidden", pointerEvents:"none", zIndex:1 }}>
+      {petals.map((p,i) => (
+        <div key={i} style={{ position:"absolute", left:p.l, top:"-30px", animation:`petalFall ${p.dur} ${p.d} infinite linear` }}>
+          <svg width={p.s} height={p.s*1.4} viewBox="0 0 10 14">
+            <ellipse cx="5" cy="7" rx="3.5" ry="6" fill={P.burgFa} opacity="0.7" transform={`rotate(${p.r} 5 7)`} />
+          </svg>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function Divider() {
+  return (
+    <div style={{ width:"100%", display:"flex", justifyContent:"center", margin:"-1px 0", lineHeight:0, overflow:"hidden" }}>
+      <svg width="420" height="44" viewBox="0 0 420 44" style={{ display:"block" }}>
+        <line x1="0" y1="22" x2="168" y2="22" stroke={P.sageFa} strokeWidth="0.6" strokeDasharray="400" strokeDashoffset="0" style={{ animation:"drawLine 1.5s ease-out forwards" }} />
+        <path d="M178 22 Q185 13 192 22 Q199 31 206 22 Q213 13 220 22 Q227 31 234 22 Q241 13 248 22" fill="none" stroke={P.burgFa} strokeWidth="1.2" />
+        <circle cx="213" cy="22" r="3.5" fill={P.burgFa} opacity="0.7" />
+        <circle cx="192" cy="22" r="2" fill={P.sageFa} />
+        <circle cx="234" cy="22" r="2" fill={P.sageFa} />
+        <line x1="252" y1="22" x2="420" y2="22" stroke={P.sageFa} strokeWidth="0.6" />
+      </svg>
+    </div>
+  );
+}
+
+function StaggerCard({ children, index, style }) {
+  const [ref, vis] = useReveal();
+  return (
+    <div ref={ref} style={{ ...style, opacity: vis ? 1 : 0, transform: vis ? "translateY(0)" : "translateY(36px)",
+      transition: `opacity 0.7s ease-out ${index * 150}ms, transform 0.7s ease-out ${index * 150}ms` }}>
+      {children}
+    </div>
+  );
+}
+
+function CalendarButton() {
+  const googleUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Daniel+%26+Edelys+Wedding&dates=20260731T140000Z/20260731T220000Z&details=Ceremony+at+Sarasota+County+Courthouse%2C+followed+by+Reception+at+Terra+Gaucha+Brazilian+Steakhouse%2C+Tampa.&location=2000+Main+Street%2C+Sarasota%2C+FL";
+  const downloadIcs = () => {
+    const ics = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Daniel & Edelys Wedding//EN","BEGIN:VEVENT",
+      "DTSTART:20260731T140000","DTEND:20260731T220000","SUMMARY:Daniel & Edelys Wedding",
+      "LOCATION:2000 Main Street\, Sarasota\, FL","DESCRIPTION:Ceremony at Sarasota County Courthouse.\nReception at Terra Gaucha Brazilian Steakhouse\, Tampa.",
+      "END:VEVENT","END:VCALENDAR"].join("\r\n");
+    const blob = new Blob([ics], { type:"text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a"); a.href=url; a.download="daniel-edelys-wedding.ics"; a.click();
+    URL.revokeObjectURL(url);
+  };
+  const btnStyle = { fontFamily:"'Lora', serif", fontSize:10, letterSpacing:3, fontWeight:600, textTransform:"uppercase",
+    padding:"11px 24px", borderRadius:2, cursor:"pointer", border:`1px solid ${P.sageFa}`, background:"transparent", color:P.inkF };
+  return (
+    <div style={{ display:"flex", gap:12, flexWrap:"wrap", justifyContent:"center", marginTop:32 }}>
+      <a href={googleUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration:"none" }}>
+        <button style={btnStyle}>+ Google Calendar</button>
+      </a>
+      <button style={btnStyle} onClick={downloadIcs}>+ Apple / iCal</button>
     </div>
   );
 }
@@ -221,6 +354,8 @@ export default function App() {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("home");
   const [scrolled, setScrolled] = useState(false);
+  const [parallax, setParallax] = useState(0);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!open) return;
@@ -228,6 +363,7 @@ export default function App() {
     const h = () => {
       if (!ticking) { window.requestAnimationFrame(() => {
         setScrolled(window.scrollY > 50);
+        setParallax(window.scrollY);
         for (const id of ["home","story","details","party","registry","rsvp"]) {
           const el = document.getElementById(id);
           if (el) { const r = el.getBoundingClientRect(); if (r.top <= 160 && r.bottom > 160) { setActive(id); break; } }
@@ -256,16 +392,19 @@ export default function App() {
   return (
     <div style={{ background: P.bg, minHeight: "100vh", fontFamily: "'Lora', serif", color: P.ink }}>
       <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
-      <style>{`* { box-sizing:border-box; margin:0; } html { scroll-behavior:smooth; } ::selection { background:${P.burgFa}; color:${P.ink}; }`}</style>
+      <style>{`* { box-sizing:border-box; margin:0; } html { scroll-behavior:smooth; } ::selection { background:${P.burgFa}; color:${P.ink}; }
+      @keyframes petalFall { 0% { transform: translateY(-20px) rotate(0deg) scale(0.8); opacity:0; } 10% { opacity:0.55; } 85% { opacity:0.35; } 100% { transform: translateY(105vh) rotate(420deg) scale(1); opacity:0; } }
+      @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } } @keyframes pulse { 0%,100% { opacity:0.6; } 50% { opacity:1; } }
+      @keyframes drawLine { from { stroke-dashoffset: 400; } to { stroke-dashoffset: 0; } }`}</style>
 
       {!open && <Envelope onOpen={() => setOpen(true)} />}
 
       {open && (<>
         <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 90, display: "flex", justifyContent: "center", alignItems: "center", gap: 2, flexWrap: "wrap",
-          padding: scrolled ? "11px 12px" : "16px 12px", background: `${P.bg}f2`, backdropFilter: "blur(12px)", borderBottom: `1px solid ${P.sageFa}44` }}>
+          padding: scrolled ? "8px 8px" : "12px 8px", background: `${P.bg}f2`, backdropFilter: "blur(12px)", borderBottom: `1px solid ${P.sageFa}44` }}>
           {links.map(([id, label]) => (
             <button key={id} onClick={() => go(id)}
-              style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "'Lora', serif", fontSize: 10.5, letterSpacing: 2.5, textTransform: "uppercase", padding: "5px 11px",
+              style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "'Lora', serif", fontSize: "clamp(9px,2.2vw,10.5px)", letterSpacing: 2, textTransform: "uppercase", padding: "5px 11px",
                 color: active === id ? P.burgDk : P.inkF, position: "relative", fontWeight: active === id ? 700 : 500 }}>
               {label}
               {active === id && <span style={{ position: "absolute", bottom: 1, left: "50%", transform: "translateX(-50%)", width: 14, height: 1.5, background: P.burg }} />}
@@ -275,6 +414,7 @@ export default function App() {
 
         {/* HOME with hero photo */}
         <section id="home" style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "120px 28px 80px", background: P.bg, position: "relative", overflow: "hidden" }}>
+          <Petals />
           <Leaf style={{ top: 80, left: 20 }} />
           <Leaf style={{ top: 80, right: 20 }} flip />
           <div style={{ position: "relative", zIndex: 2, textAlign: "center" }}>
@@ -290,7 +430,7 @@ export default function App() {
 
             {/* Hero photo */}
             <div style={{ margin: "28px auto", maxWidth: 340, borderRadius: 6, overflow: "hidden", border: `3px solid ${P.sageFa}`, boxShadow: `0 8px 32px rgba(114,47,55,0.1)` }}>
-              <img src={PHOTOS.hero} alt="Daniel and Edelys" style={{ display: "block", width: "100%", height: "auto" }} />
+              <img src={PHOTOS.hero} alt="Daniel and Edelys" style={{ display: "block", width: "100%", height: "auto", transform: `translateY(${parallax * 0.12}px)`, transition: "transform 0.05s linear" }} />
             </div>
 
             <p style={{ fontFamily: "'Lora', serif", fontSize: 14, letterSpacing: 4, textTransform: "uppercase", color: P.inkS, fontWeight: 500 }}>Request the pleasure of your company</p>
@@ -301,6 +441,7 @@ export default function App() {
           </div>
         </section>
 
+        <Divider />
         {/* OUR STORY with photos */}
         <Sec id="story" bg={P.ivory}>
           <Head pre="The Beginning" title="Our Story" />
@@ -311,11 +452,11 @@ export default function App() {
           </div>
 
           <div style={{ maxWidth: 540, width: "100%", position: "relative" }}>
-            <div style={{ position: "absolute", left: "50%", top: 0, bottom: 0, width: 1, background: `linear-gradient(to bottom, transparent, ${P.sageFa}, transparent)`, transform: "translateX(-50%)" }} />
+            <div style={{ position: "absolute", left: isMobile ? 14 : "50%", top: 0, bottom: 0, width: 1, background: `linear-gradient(to bottom, transparent, ${P.sageFa}, transparent)`, transform: isMobile ? "none" : "translateX(-50%)" }} />
             {timeline.map((item, i) => (
-              <div key={i} style={{ display: "flex", flexDirection: i%2===0?"row":"row-reverse", marginBottom: 48, position: "relative" }}>
-                <div style={{ position: "absolute", left: "50%", top: 6, transform: "translateX(-50%)", width: 9, height: 9, borderRadius: "50%", border: `1.5px solid ${P.burg}`, background: P.ivory, zIndex: 2 }} />
-                <div style={{ width: "45%", textAlign: i%2===0?"right":"left", padding: i%2===0?"0 24px 0 0":"0 0 0 24px" }}>
+              <div key={i} style={{ display: "flex", flexDirection: isMobile ? "column" : (i%2===0?"row":"row-reverse"), marginBottom: isMobile ? 32 : 48, position: "relative", paddingLeft: isMobile ? 36 : 0 }}>
+                <div style={{ position: "absolute", left: isMobile ? 10 : "50%", top: 6, transform: isMobile ? "none" : "translateX(-50%)", width: 9, height: 9, borderRadius: "50%", border: `1.5px solid ${P.burg}`, background: P.ivory, zIndex: 2 }} />
+                <div style={{ width: isMobile ? "100%" : "45%", textAlign: "left", padding: isMobile ? 0 : (i%2===0?"0 24px 0 0":"0 0 0 24px") }}>
                   <p style={{ fontFamily: "'Lora', serif", fontSize: 10, letterSpacing: 3, color: P.sage, marginBottom: 5, textTransform: "uppercase", fontWeight: 600 }}>{item.date}</p>
                   <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 18, fontWeight: 500, fontStyle: "italic", color: P.burgDk, margin: "0 0 8px 0" }}>{item.title}</h3>
                   <p style={{ fontFamily: "'Lora', serif", fontSize: 13.5, color: P.inkS, lineHeight: 1.75 }}>{item.text}</p>
@@ -325,14 +466,14 @@ export default function App() {
                     </div>
                   )}
                 </div>
-                <div style={{ width: "10%" }} />
-                <div style={{ width: "45%" }}>
+                {!isMobile && <div style={{ width: "10%" }} />}
+                {!isMobile && <div style={{ width: "45%" }}>
                   {i === 5 && (
                     <div style={{ marginTop: 8, borderRadius: 4, overflow: "hidden", border: `1.5px solid ${P.burgFa}` }}>
                       <img src={PHOTOS.ring} alt="The Ring" style={{ display: "block", width: "100%", height: "auto" }} />
                     </div>
                   )}
-                </div>
+                </div>}
               </div>
             ))}
           </div>
@@ -342,6 +483,7 @@ export default function App() {
           </div>
         </Sec>
 
+        <Divider />
         {/* DETAILS */}
         <Sec id="details">
           <Head pre="The Celebration" title="Wedding Details" />
@@ -350,18 +492,20 @@ export default function App() {
               { icon: "courthouse", title: "The Ceremony", lines: ["Sarasota County Courthouse","2000 Main Street, Sarasota, FL","Friday, July 31, 2026","Two O'Clock in the Afternoon"] },
               { icon: "flame", title: "The Celebration", lines: ["Terra Gaucha Brazilian Steakhouse","Tampa, Florida","Following the Ceremony","Dinner, Toasts & Dancing"] },
               { icon: "diamond", title: "Dress Code", lines: ["Formal Attire","Anything but white","Dress to impress"] },
-            ].map(card => (
-              <div key={card.title} style={{ textAlign: "center", padding: "36px 24px", background: P.ivory, border: `0.5px solid ${P.sageFa}`, borderRadius: 4, width: 250 }}>
+            ].map((card, i) => (
+              <StaggerCard key={card.title} index={i} style={{ textAlign: "center", padding: "36px 24px", background: P.ivory, border: `0.5px solid ${P.sageFa}`, borderRadius: 4, width: 250 }}>
                 <div style={{ marginBottom: 18 }}><Icon type={card.icon} size={30} /></div>
                 <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 19, fontWeight: 500, fontStyle: "italic", color: P.burgDk, margin: "0 0 16px 0" }}>{card.title}</h3>
                 {card.lines.map((l, i) => (
                   <p key={i} style={{ fontFamily: "'Lora', serif", fontSize: 13.5, color: i===0?P.ink:P.inkS, lineHeight: 1.7, fontWeight: i===0?600:400 }}>{l}</p>
                 ))}
-              </div>
+              </StaggerCard>
             ))}
           </div>
+          <CalendarButton />
         </Sec>
 
+        <Divider />
         {/* WEDDING PARTY */}
         <Sec id="party" bg={P.ivory}>
           <Head pre="Our Favorite People" title="The Wedding Party" />
@@ -373,13 +517,13 @@ export default function App() {
               <p style={{ fontFamily: "'Lora', serif", fontSize: 11, letterSpacing: 5, textTransform: "uppercase", color: P.sage, marginBottom: 22, fontWeight: 600 }}>{group.side}</p>
               <div style={{ display: "flex", gap: 20, justifyContent: "center", flexWrap: "wrap" }}>
                 {group.roles.map((role, i) => (
-                  <div key={i} style={{ textAlign: "center", width: 130 }}>
+                  <StaggerCard key={i} index={i} style={{ textAlign: "center", width: 130 }}>
                     <div style={{ width: 72, height: 72, borderRadius: "50%", background: `linear-gradient(135deg, ${P.parch}, ${P.burgFa}30)`, margin: "0 auto 12px", display: "flex", alignItems: "center", justifyContent: "center", border: `1px solid ${P.sageFa}` }}>
                       <Icon type="person" size={26} />
                     </div>
                     <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 15, fontStyle: "italic", color: P.ink, fontWeight: 500 }}>TBA</p>
                     <p style={{ fontFamily: "'Lora', serif", fontSize: 9, letterSpacing: 3, textTransform: "uppercase", color: P.sage, marginTop: 3, fontWeight: 600 }}>{role}</p>
-                  </div>
+                  </StaggerCard>
                 ))}
               </div>
             </div>
@@ -387,6 +531,7 @@ export default function App() {
           <p style={{ fontFamily: "'Lora', serif", fontStyle: "italic", fontSize: 13, color: P.inkF }}>Names coming soon</p>
         </Sec>
 
+        <Divider />
         {/* REGISTRY */}
         <Sec id="registry">
           <Head pre="Your Generosity" title="Gift Registry" />
@@ -412,6 +557,7 @@ export default function App() {
           </div>
         </Sec>
 
+        <Divider />
         {/* RSVP with sunset photo */}
         <Sec id="rsvp" bg={P.ivory}>
           <Head pre="We Hope You Can Make It" title="Kindly Respond" />
