@@ -369,6 +369,14 @@ export default function App() {
   const isMobile = useIsMobile();
 
   useEffect(() => {
+    const loader = document.getElementById("loader");
+    if (loader) {
+      loader.classList.add("fade-out");
+      setTimeout(() => loader.remove(), 800);
+    }
+  }, []);
+
+  useEffect(() => {
     if (!open) return;
     let ticking = false;
     const h = () => {

@@ -21,9 +21,51 @@
     <meta name="twitter:description" content="Join us as we celebrate our wedding day in Sarasota & Tampa, Florida." />
     <meta name="twitter:image" content="https://danielandedelys.netlify.app/Tulipanes.jpeg" />
 
-    <style>body{margin:0;padding:0;}</style>
+    <style>
+      body { margin:0; padding:0; }
+      #loader {
+        position: fixed; inset: 0; z-index: 99999;
+        background: #FAF7F4;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        transition: opacity 0.8s ease-out;
+      }
+      #loader.fade-out { opacity: 0; pointer-events: none; }
+      .loader-names {
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: clamp(32px, 7vw, 56px);
+        font-style: italic;
+        color: #5C252C;
+        letter-spacing: 1px;
+        margin: 0;
+        line-height: 1.1;
+        text-align: center;
+      }
+      .loader-date {
+        font-family: Georgia, serif;
+        font-size: 11px;
+        letter-spacing: 6px;
+        text-transform: uppercase;
+        color: #3D6B2E;
+        margin-top: 12px;
+        font-weight: normal;
+      }
+      .loader-ring {
+        width: 48px; height: 48px;
+        border: 1px solid #D4A0A7;
+        border-top-color: #722F37;
+        border-radius: 50%;
+        animation: spin 1.2s linear infinite;
+        margin-bottom: 32px;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
   </head>
   <body>
+    <div id="loader">
+      <div class="loader-ring"></div>
+      <p class="loader-names">Daniel &amp; Edelys</p>
+      <p class="loader-date">July 31 · 2026</p>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
