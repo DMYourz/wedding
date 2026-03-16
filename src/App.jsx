@@ -236,9 +236,9 @@ function Envelope({ onOpen }) {
         <p style={{ fontFamily: "'Lora', serif", fontSize: 11, letterSpacing: 5, color: "rgba(168,191,154,0.85)", fontWeight: 600, textTransform: "uppercase", marginBottom: 36 }}>July 31st · 2026</p>
 
         {/* Clean envelope — no text inside */}
-        <div style={{ position: "relative", width: 300, height: 200, filter: "drop-shadow(0 16px 48px rgba(0,0,0,0.4))" }}>
+        <div style={{ position: "relative", width: 300, height: 200, perspective: "900px" }}>
           {/* Body */}
-          <div style={{ position: "absolute", bottom: 0, width: "100%", height: 160, background: "rgba(252,249,245,0.92)", backdropFilter: "blur(8px)", borderRadius: 3, border: "0.5px solid rgba(255,255,255,0.6)" }} />
+          <div style={{ position: "absolute", bottom: 0, width: "100%", height: 160, background: "rgba(252,249,245,0.92)", backdropFilter: "blur(8px)", borderRadius: 3, border: "0.5px solid rgba(255,255,255,0.6)", boxShadow: "0 16px 48px rgba(0,0,0,0.4)" }} />
           {/* Bottom V-fold */}
           <div style={{ position: "absolute", bottom: 0, width: "100%", height: 160, borderRadius: 3, overflow: "hidden", pointerEvents: "none" }}>
             <svg width="100%" height="100%" viewBox="0 0 300 160">
@@ -249,21 +249,33 @@ function Envelope({ onOpen }) {
             </svg>
           </div>
           {/* Wax seal */}
-          <div style={{ position: "absolute", bottom: 58, left: "50%", transform: "translateX(-50%)", zIndex: 3, pointerEvents: "none" }}>
+          <div style={{ position: "absolute", bottom: 58, left: "50%", transform: "translateX(-50%)", zIndex: 3, pointerEvents: "none", transition: "opacity 0.4s ease", opacity: flapOpen ? 1 : 0.85 }}>
             <svg width="38" height="38" viewBox="0 0 38 38">
               <circle cx="19" cy="19" r="17" fill={P.burg} opacity="0.88" />
               <circle cx="19" cy="19" r="14" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="0.6" />
               <text x="19" y="23" textAnchor="middle" fill="rgba(255,249,245,0.9)" fontSize="11" fontFamily="'Playfair Display', serif" fontStyle="italic" fontWeight="500">D·E</text>
             </svg>
           </div>
-          {/* Flap */}
-          <div style={{ position: "absolute", top: flapOpen ? 18 : 42, left: 0, width: 0, height: 0,
-            borderLeft: "150px solid transparent", borderRight: "150px solid transparent",
-            borderTop: "80px solid rgba(245,241,236,0.93)",
+          {/* Flap — hinges along the top edge of the envelope body */}
+          <div style={{
+            position: "absolute",
+            top: 40,
+            left: 0,
+            width: 300,
+            height: 80,
             transformOrigin: "top center",
-            transform: flapOpen ? "rotateX(180deg)" : "rotateX(0deg)",
-            transition: "transform 0.65s ease-out, top 0.3s ease",
-            filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.08))" }} />
+            transform: flapOpen ? "rotateX(-175deg)" : "rotateX(0deg)",
+            transition: "transform 0.75s cubic-bezier(0.4, 0, 0.2, 1)",
+            zIndex: flapOpen ? 1 : 5,
+            backfaceVisibility: "hidden",
+          }}>
+            <svg width="300" height="80" style={{ display: "block" }}>
+              <polygon points="0,0 300,0 150,80" fill="rgba(245,241,236,0.95)" />
+              <line x1="0" y1="0" x2="300" y2="0" stroke="rgba(200,190,178,0.5)" strokeWidth="0.6" />
+              <line x1="0" y1="0" x2="150" y2="80" stroke="rgba(200,190,178,0.3)" strokeWidth="0.4" />
+              <line x1="300" y1="0" x2="150" y2="80" stroke="rgba(200,190,178,0.3)" strokeWidth="0.4" />
+            </svg>
+          </div>
         </div>
 
         <p style={{ marginTop: 36, fontFamily: "'Lora', serif", fontSize: 10, letterSpacing: 6, color: "rgba(245,237,228,0.5)", textTransform: "uppercase", fontWeight: 600, animation: "pulse 2.5s ease-in-out infinite" }}>Tap to open</p>
