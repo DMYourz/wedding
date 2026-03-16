@@ -205,6 +205,18 @@ function Envelope({ onOpen }) {
   );
 }
 
+function Sec({ id, children, bg }) {
+  const [ref, vis] = useReveal();
+  return (
+    <section ref={ref} id={id} style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+      padding: "100px 28px", background: bg || P.bg, position: "relative", overflow: "hidden",
+      opacity: vis ? 1 : 0, transform: vis ? "translateY(0)" : "translateY(24px)",
+      transition: "opacity 0.7s ease-out, transform 0.7s ease-out" }}>
+      {children}
+    </section>
+  );
+}
+
 export default function App() {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("home");
@@ -239,17 +251,7 @@ export default function App() {
     { date: "Feb 15, 2026", title: "The Proposal", text: "The day after Valentine\u2019s Day, Daniel asked Edelys to be his forever. With her parents\u2019 blessing and a heart full of certainty \u2014 she said yes." },
   ];
 
-  const Sec = ({ id, children, bg }) => {
-    const [ref, vis] = useReveal();
-    return (
-      <section ref={ref} id={id} style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-        padding: "100px 28px", background: bg || P.bg, position: "relative", overflow: "hidden",
-        opacity: vis ? 1 : 0.05, transform: vis ? "translateY(0)" : "translateY(24px)",
-        transition: vis ? "opacity 0.7s ease-out, transform 0.7s ease-out" : "none" }}>
-        {children}
-      </section>
-    );
-  };
+
 
   return (
     <div style={{ background: P.bg, minHeight: "100vh", fontFamily: "'Lora', serif", color: P.ink }}>
