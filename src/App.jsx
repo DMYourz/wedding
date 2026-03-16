@@ -125,6 +125,7 @@ function Countdown({ date }) {
 
 function RSVPForm() {
   const [done, setDone] = useState(false);
+  const [confetti, setConfetti] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState(false);
   const [f, setF] = useState({ name:"", email:"", att:"", note:"" });
@@ -148,6 +149,7 @@ function RSVPForm() {
         }),
       });
       setDone(true);
+      if (f.att === "yes") { setConfetti(true); setTimeout(() => setConfetti(false), 3000); }
     } catch (err) {
       setError(true);
     }
@@ -155,6 +157,8 @@ function RSVPForm() {
   };
 
   if (done) return (
+    <>
+      {confetti && <Confetti />}
     <div style={{ textAlign: "center", padding: "52px 40px", background: P.ivory, border: `1px solid ${P.sageFa}`, borderRadius: 4, maxWidth: 440, animation: "fadeInUp 0.8s ease-out" }}>
       <svg width="52" height="52" viewBox="0 0 52 52" style={{ display:"block", margin:"0 auto 16px" }}>
         <circle cx="26" cy="26" r="24" fill="none" stroke={P.burgFa} strokeWidth="1" />
@@ -175,6 +179,7 @@ function RSVPForm() {
         </div>
       )}
     </div>
+    </>
   );
   return (
     <div style={{ maxWidth: 440, width: "100%", background: P.ivory, padding: "40px 32px", borderRadius: 4, border: `1px solid ${P.sageFa}` }}>
@@ -350,6 +355,51 @@ function CalendarButton() {
   );
 }
 
+function Confetti() {
+  const colors = [P.burg, P.burgFa, P.sage, P.sageFa, "#F5EDE4", P.burgLt, "#A8BF9A"];
+  const pieces = Array.from({ length: 70 }, (_, i) => ({
+    left: `${(i * 13.7) % 100}%`,
+    delay: `${(i * 0.06) % 1}s`,
+    dur: `${1.4 + (i * 0.07) % 1}s`,
+    color: colors[i % colors.length],
+    w: 5 + (i * 3) % 7,
+    h: 3 + (i * 2) % 5,
+    rot: (i * 47) % 360,
+  }));
+  return (
+    <div style={{ position:"fixed", inset:0, pointerEvents:"none", zIndex:9998, overflow:"hidden" }}>
+      {pieces.map((p, i) => (
+        <div key={i} style={{ position:"absolute", left:p.left, top:"-12px", width:p.w, height:p.h,
+          background:p.color, borderRadius:1, opacity:0.9,
+          animation:`confettiFall ${p.dur} ${p.delay} ease-in forwards`,
+          transform:`rotate(${p.rot}deg)` }} />
+      ))}
+    </div>
+  );
+}
+
+function CustomCursor() {
+  const [pos, setPos] = useState({ x:-100, y:-100 });
+  const [hovered, setHovered] = useState(false);
+  useEffect(() => {
+    const move = (e) => setPos({ x: e.clientX, y: e.clientY });
+    const over = (e) => setHovered(!!(e.target.closest("button,a,[role='button']")));
+    document.addEventListener("mousemove", move);
+    document.addEventListener("mouseover", over);
+    return () => { document.removeEventListener("mousemove", move); document.removeEventListener("mouseover", over); };
+  }, []);
+  return (
+    <div style={{ position:"fixed", left:pos.x, top:pos.y, transform:"translate(-50%,-50%)",
+      pointerEvents:"none", zIndex:99998, transition:"width 0.15s, height 0.15s",
+      width: hovered ? 36 : 20, height: hovered ? 36 : 20 }}>
+      <svg width="100%" height="100%" viewBox="0 0 36 36">
+        <circle cx="18" cy="18" r="16" fill="none" stroke={P.burg} strokeWidth="1" opacity={hovered ? 0.7 : 0.45} />
+        {!hovered && <circle cx="18" cy="18" r="2" fill={P.burg} opacity="0.5" />}
+      </svg>
+    </div>
+  );
+}
+
 function Sec({ id, children, bg }) {
   const [ref, vis] = useReveal();
   return (
@@ -374,6 +424,18 @@ export default function App() {
       loader.classList.add("fade-out");
       setTimeout(() => loader.remove(), 800);
     }
+  }, []);
+
+  useEffect(() => {
+    const wedding = new Date("2026-07-31T14:00:00");
+    const update = () => {
+      const diff = wedding - new Date();
+      const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+      document.title = diff > 0 ? `${days} days · Daniel & Edelys` : "Daniel & Edelys — July 31, 2026";
+    };
+    update();
+    const t = setInterval(update, 60000);
+    return () => clearInterval(t);
   }, []);
 
   useEffect(() => {
@@ -409,10 +471,12 @@ export default function App() {
 
   return (
     <div style={{ background: P.bg, minHeight: "100vh", fontFamily: "'Lora', serif", color: P.ink }}>
+      {!isMobile && <CustomCursor />}
       <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
-      <style>{`* { box-sizing:border-box; margin:0; } html { scroll-behavior:smooth; } ::selection { background:${P.burgFa}; color:${P.ink}; }
+      <style>{`* { box-sizing:border-box; margin:0; } html { scroll-behavior:smooth; } ::selection { background:${P.burgFa}; color:${P.ink}; } @media (hover:hover) { * { cursor:none !important; } }
       @keyframes petalFall { 0% { transform: translateY(-20px) rotate(0deg) scale(0.8); opacity:0; } 10% { opacity:0.55; } 85% { opacity:0.35; } 100% { transform: translateY(105vh) rotate(420deg) scale(1); opacity:0; } }
       @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } } @keyframes pulse { 0%,100% { opacity:0.6; } 50% { opacity:1; } }
+      @keyframes confettiFall { 0% { transform: translateY(-10px) rotate(0deg); opacity:1; } 100% { transform: translateY(105vh) rotate(720deg); opacity:0; } }
       @keyframes drawLine { from { stroke-dashoffset: 400; } to { stroke-dashoffset: 0; } }`}</style>
 
       {!open && <Envelope onOpen={() => setOpen(true)} />}
@@ -507,8 +571,8 @@ export default function App() {
           <Head pre="The Celebration" title="Wedding Details" />
           <div style={{ display: "flex", gap: 24, flexWrap: "wrap", justifyContent: "center", maxWidth: 860 }}>
             {[
-              { icon: "courthouse", title: "The Ceremony", lines: ["Sarasota County Courthouse","2000 Main Street, Sarasota, FL","Friday, July 31, 2026","Two O'Clock in the Afternoon"] },
-              { icon: "flame", title: "The Celebration", lines: ["Terra Gaucha Brazilian Steakhouse","Tampa, Florida","Following the Ceremony","Dinner, Toasts & Dancing"] },
+              { icon: "courthouse", title: "The Ceremony", lines: ["Sarasota County Courthouse","2000 Main Street, Sarasota, FL","Friday, July 31, 2026","Two O'Clock in the Afternoon"], map: "https://maps.google.com/?q=2000+Main+Street+Sarasota+FL+34237" },
+              { icon: "flame", title: "The Celebration", lines: ["Terra Gaucha Brazilian Steakhouse","Tampa, Florida","Following the Ceremony","Dinner, Toasts & Dancing"], map: "https://maps.google.com/?q=Terra+Gaucha+Brazilian+Steakhouse+Tampa+FL" },
               { icon: "diamond", title: "Dress Code", lines: ["Formal Attire","Anything but white","Dress to impress"] },
             ].map((card, i) => (
               <StaggerCard key={card.title} index={i} style={{ textAlign: "center", padding: "36px 24px", background: P.ivory, border: `0.5px solid ${P.sageFa}`, borderRadius: 4, width: 250 }}>
@@ -517,6 +581,14 @@ export default function App() {
                 {card.lines.map((l, i) => (
                   <p key={i} style={{ fontFamily: "'Lora', serif", fontSize: 13.5, color: i===0?P.ink:P.inkS, lineHeight: 1.7, fontWeight: i===0?600:400 }}>{l}</p>
                 ))}
+                {card.map && (
+                  <a href={card.map} target="_blank" rel="noopener noreferrer" style={{ textDecoration:"none", display:"inline-block", marginTop:18 }}>
+                    <div style={{ display:"flex", alignItems:"center", gap:6, padding:"8px 16px", border:`0.5px solid ${P.sageFa}`, borderRadius:2, background:"transparent" }}>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={P.sage} strokeWidth="2" strokeLinecap="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+                      <span style={{ fontFamily:"'Lora', serif", fontSize:10, letterSpacing:3, textTransform:"uppercase", color:P.sage, fontWeight:600 }}>Get Directions</span>
+                    </div>
+                  </a>
+                )}
               </StaggerCard>
             ))}
           </div>
