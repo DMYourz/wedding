@@ -600,7 +600,7 @@ export default function App() {
         <Sec id="party" bg={P.ivory}>
           <Head pre="Our Favorite People" title="The Wedding Party" />
           {[
-            { side: "Groom's Side", members: [{ name:"Daniel", role:"Best Man" }, { name:"Emanuel", role:"Groomsman" }, { name:"Andrew", role:"Groomsman" }] },
+            { side: "Groom's Side", members: [{ name:"Daniel Boyer", role:"Best Man" }, { name:"Emanuel Luciano", role:"Groomsman" }, { name:"Andrew Reyes", role:"Groomsman" }] },
             { side: "Bride's Side", members: [{ name:"Yanalys", role:"Maid of Honor" }, { name:"Gia", role:"Bridesmaid" }, { name:"Melanie", role:"Bridesmaid" }] },
           ].map(group => (
             <div key={group.side} style={{ textAlign: "center", marginBottom: 36 }}>
