@@ -630,7 +630,7 @@ export default function App() {
           </p>
           <div style={{ display: "flex", gap: 18, flexWrap: "wrap", justifyContent: "center" }}>
             {[
-              ["Crate & Barrel","gift","https://www.crateandbarrel.com/gift-registry/daniel-and-edelys/r0000000"],
+              ["Crate & Barrel","gift","https://www.crateandbarrel.com/gift-registry/daniel-mochkarovsky-and-edelys-colon/r7519787"],
               ["Target","gift","https://www.target.com/gift-registry/gift/daniel-and-edelys"],
               ["Amazon","gift","https://www.amazon.com/wedding/registry/YOURREGISTRYID"],
               ["West Elm","gift","https://www.westelm.com/registry/daniel-and-edelys/r0000000"],
