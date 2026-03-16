@@ -317,14 +317,26 @@ function StaggerCard({ children, index, style }) {
 function CalendarButton() {
   const googleUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Daniel+%26+Edelys+Wedding&dates=20260731T140000Z/20260731T220000Z&details=Ceremony+at+Sarasota+County+Courthouse%2C+followed+by+Reception+at+Terra+Gaucha+Brazilian+Steakhouse%2C+Tampa.&location=2000+Main+Street%2C+Sarasota%2C+FL";
   const downloadIcs = () => {
-    const ics = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Daniel & Edelys Wedding//EN","BEGIN:VEVENT",
-      "DTSTART:20260731T140000","DTEND:20260731T220000","SUMMARY:Daniel & Edelys Wedding",
-      "LOCATION:2000 Main Street\, Sarasota\, FL","DESCRIPTION:Ceremony at Sarasota County Courthouse.\nReception at Terra Gaucha Brazilian Steakhouse\, Tampa.",
-      "END:VEVENT","END:VCALENDAR"].join("\r\n");
-    const blob = new Blob([ics], { type:"text/calendar;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a"); a.href=url; a.download="daniel-edelys-wedding.ics"; a.click();
-    URL.revokeObjectURL(url);
+    const lines = [
+      "BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Daniel & Edelys Wedding//EN",
+      "CALSCALE:GREGORIAN","METHOD:PUBLISH","BEGIN:VEVENT",
+      "DTSTART:20260731T140000","DTEND:20260731T220000",
+      "SUMMARY:Daniel & Edelys Wedding",
+      "LOCATION:2000 Main Street\, Sarasota\, FL",
+      "DESCRIPTION:Ceremony at Sarasota County Courthouse. Reception at Terra Gaucha Brazilian Steakhouse\, Tampa.",
+      "END:VEVENT","END:VCALENDAR"
+    ].join("\r\n");
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || /iPad|iPhone|iPod/.test(navigator.userAgent);
+    if (isSafari) {
+      window.open("data:text/calendar;charset=utf-8," + encodeURIComponent(lines));
+    } else {
+      const blob = new Blob([lines], { type:"text/calendar;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = "daniel-edelys-wedding.ics";
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
   };
   const btnStyle = { fontFamily:"'Lora', serif", fontSize:10, letterSpacing:3, fontWeight:600, textTransform:"uppercase",
     padding:"11px 24px", borderRadius:2, cursor:"pointer", border:`1px solid ${P.sageFa}`, background:"transparent", color:P.inkF };
