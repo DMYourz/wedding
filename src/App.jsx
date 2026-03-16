@@ -261,21 +261,16 @@ function Envelope({ onOpen }) {
             position: "absolute",
             top: 40,
             left: 0,
-            width: 300,
+            width: "100%",
             height: 80,
+            background: "rgba(245,241,236,0.95)",
+            clipPath: "polygon(0 0, 100% 0, 50% 100%)",
+            boxShadow: "inset 0 -1px 0 rgba(200,190,178,0.4)",
             transformOrigin: "top center",
-            transform: flapOpen ? "rotateX(-175deg)" : "rotateX(0deg)",
-            transition: "transform 0.75s cubic-bezier(0.4, 0, 0.2, 1)",
+            transform: flapOpen ? "rotateX(-180deg)" : "rotateX(0deg)",
+            transition: "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
             zIndex: flapOpen ? 1 : 5,
-            backfaceVisibility: "hidden",
-          }}>
-            <svg width="300" height="80" style={{ display: "block" }}>
-              <polygon points="0,0 300,0 150,80" fill="rgba(245,241,236,0.95)" />
-              <line x1="0" y1="0" x2="300" y2="0" stroke="rgba(200,190,178,0.5)" strokeWidth="0.6" />
-              <line x1="0" y1="0" x2="150" y2="80" stroke="rgba(200,190,178,0.3)" strokeWidth="0.4" />
-              <line x1="300" y1="0" x2="150" y2="80" stroke="rgba(200,190,178,0.3)" strokeWidth="0.4" />
-            </svg>
-          </div>
+          }} />
         </div>
 
         <p style={{ marginTop: 36, fontFamily: "'Lora', serif", fontSize: 10, letterSpacing: 6, color: "rgba(245,237,228,0.5)", textTransform: "uppercase", fontWeight: 600, animation: "pulse 2.5s ease-in-out infinite" }}>Tap to open</p>
