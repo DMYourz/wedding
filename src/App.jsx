@@ -600,25 +600,24 @@ export default function App() {
         <Sec id="party" bg={P.ivory}>
           <Head pre="Our Favorite People" title="The Wedding Party" />
           {[
-            { side: "Groom's Side", roles: ["Best Man","Groomsman","Groomsman"] },
-            { side: "Bride's Side", roles: ["Maid of Honor","Bridesmaid","Bridesmaid"] },
+            { side: "Groom's Side", members: [{ name:"Daniel", role:"Best Man" }, { name:"Emanuel", role:"Groomsman" }, { name:"Andrew", role:"Groomsman" }] },
+            { side: "Bride's Side", members: [{ name:"Yanalys", role:"Maid of Honor" }, { name:"Gia", role:"Bridesmaid" }, { name:"Melanie", role:"Bridesmaid" }] },
           ].map(group => (
             <div key={group.side} style={{ textAlign: "center", marginBottom: 36 }}>
               <p style={{ fontFamily: "'Lora', serif", fontSize: 11, letterSpacing: 5, textTransform: "uppercase", color: P.sage, marginBottom: 22, fontWeight: 600 }}>{group.side}</p>
               <div style={{ display: "flex", gap: 20, justifyContent: "center", flexWrap: "wrap" }}>
-                {group.roles.map((role, i) => (
+                {group.members.map((m, i) => (
                   <StaggerCard key={i} index={i} style={{ textAlign: "center", width: 130 }}>
                     <div style={{ width: 72, height: 72, borderRadius: "50%", background: `linear-gradient(135deg, ${P.parch}, ${P.burgFa}30)`, margin: "0 auto 12px", display: "flex", alignItems: "center", justifyContent: "center", border: `1px solid ${P.sageFa}` }}>
                       <Icon type="person" size={26} />
                     </div>
-                    <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 15, fontStyle: "italic", color: P.ink, fontWeight: 500 }}>TBA</p>
-                    <p style={{ fontFamily: "'Lora', serif", fontSize: 9, letterSpacing: 3, textTransform: "uppercase", color: P.sage, marginTop: 3, fontWeight: 600 }}>{role}</p>
+                    <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 15, fontStyle: "italic", color: P.ink, fontWeight: 500 }}>{m.name}</p>
+                    <p style={{ fontFamily: "'Lora', serif", fontSize: 9, letterSpacing: 3, textTransform: "uppercase", color: P.sage, marginTop: 3, fontWeight: 600 }}>{m.role}</p>
                   </StaggerCard>
                 ))}
               </div>
             </div>
           ))}
-          <p style={{ fontFamily: "'Lora', serif", fontStyle: "italic", fontSize: 13, color: P.inkF }}>Names coming soon</p>
         </Sec>
 
         <Divider />
