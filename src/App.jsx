@@ -366,7 +366,6 @@ export default function App() {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("home");
   const [scrolled, setScrolled] = useState(false);
-  const [parallax, setParallax] = useState(0);
   const isMobile = useIsMobile();
 
   useEffect(() => {
@@ -375,7 +374,6 @@ export default function App() {
     const h = () => {
       if (!ticking) { window.requestAnimationFrame(() => {
         setScrolled(window.scrollY > 50);
-        setParallax(window.scrollY);
         for (const id of ["home","story","details","party","registry","rsvp"]) {
           const el = document.getElementById(id);
           if (el) { const r = el.getBoundingClientRect(); if (r.top <= 160 && r.bottom > 160) { setActive(id); break; } }
@@ -442,7 +440,7 @@ export default function App() {
 
             {/* Hero photo */}
             <div style={{ margin: "28px auto", maxWidth: 340, borderRadius: 6, overflow: "hidden", border: `3px solid ${P.sageFa}`, boxShadow: `0 8px 32px rgba(114,47,55,0.1)` }}>
-              <img src={PHOTOS.hero} alt="Daniel and Edelys" style={{ display: "block", width: "100%", height: "auto", transform: isMobile ? "none" : `translateY(${parallax * 0.12}px)`, transition: "transform 0.05s linear" }} />
+              <img src={PHOTOS.hero} alt="Daniel and Edelys" style={{ display: "block", width: "100%", height: "auto" }} />
             </div>
 
             <p style={{ fontFamily: "'Lora', serif", fontSize: 14, letterSpacing: 4, textTransform: "uppercase", color: P.inkS, fontWeight: 500 }}>Request the pleasure of your company</p>
