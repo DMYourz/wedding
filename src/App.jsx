@@ -631,7 +631,7 @@ export default function App() {
           <div style={{ display: "flex", gap: 18, flexWrap: "wrap", justifyContent: "center" }}>
             {[
               ["Crate & Barrel","gift","https://www.crateandbarrel.com/gift-registry/daniel-mochkarovsky-and-edelys-colon/r7519787"],
-              ["Target","gift","https://www.target.com/gift-registry/gift/daniel-and-edelys"],
+              ["Target","gift","https://www.target.com/gift-registry/gift-giver?type=WEDDING&registryId=8c51ea80-20ee-11f1-ac2b-c16574c49d7c&createdRegistry=true&registrant=true&regMode=REGST"],
               ["Amazon","gift","https://www.amazon.com/wedding/share/danielandedelys"],
               ["West Elm","gift","https://www.westelm.com/registry/daniel-and-edelys/r0000000"],
               ["Honeymoon Fund","heart","https://www.example.com/honeymoon-fund"],
