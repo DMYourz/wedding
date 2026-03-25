@@ -218,7 +218,7 @@ function Envelope({ onOpen }) {
     <div onClick={go} style={{ position: "fixed", inset: 0, zIndex: 200, cursor: "pointer", overflow: "hidden" }}>
       {/* Tulip background */}
       <img src="/Tulipanes.jpeg" alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 60%" }} />
-      {/* Gradient overlay — lighter at top, slightly deeper at bottom */}
+      {/* Gradient overlay - lighter at top, slightly deeper at bottom */}
       <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(12,10,8,0.25) 0%, rgba(12,10,8,0.52) 100%)" }} />
 
       {/* Content */}
@@ -235,7 +235,7 @@ function Envelope({ onOpen }) {
         </svg>
         <p style={{ fontFamily: "'Lora', serif", fontSize: 11, letterSpacing: 5, color: "rgba(168,191,154,0.85)", fontWeight: 600, textTransform: "uppercase", marginBottom: 36 }}>July 31st · 2026</p>
 
-        {/* Clean envelope — no text inside */}
+        {/* Clean envelope - no text inside */}
         <div style={{ position: "relative", width: 300, height: 200, perspective: "900px" }}>
           {/* Body */}
           <div style={{ position: "absolute", bottom: 0, width: "100%", height: 160, background: "rgba(252,249,245,0.92)", backdropFilter: "blur(8px)", borderRadius: 3, border: "0.5px solid rgba(255,255,255,0.6)", boxShadow: "0 16px 48px rgba(0,0,0,0.4)" }} />
@@ -256,7 +256,7 @@ function Envelope({ onOpen }) {
               <text x="19" y="23" textAnchor="middle" fill="rgba(255,249,245,0.9)" fontSize="11" fontFamily="'Playfair Display', serif" fontStyle="italic" fontWeight="500">D·E</text>
             </svg>
           </div>
-          {/* Flap — hinges along the top edge of the envelope body */}
+          {/* Flap - hinges along the top edge of the envelope body */}
           <div style={{
             position: "absolute",
             top: 40,
@@ -385,28 +385,6 @@ function Confetti() {
   );
 }
 
-function CustomCursor() {
-  const [pos, setPos] = useState({ x:-100, y:-100 });
-  const [hovered, setHovered] = useState(false);
-  useEffect(() => {
-    const move = (e) => setPos({ x: e.clientX, y: e.clientY });
-    const over = (e) => setHovered(!!(e.target.closest("button,a,[role='button']")));
-    document.addEventListener("mousemove", move);
-    document.addEventListener("mouseover", over);
-    return () => { document.removeEventListener("mousemove", move); document.removeEventListener("mouseover", over); };
-  }, []);
-  return (
-    <div style={{ position:"fixed", left:pos.x, top:pos.y, transform:"translate(-50%,-50%)",
-      pointerEvents:"none", zIndex:99998, transition:"width 0.15s, height 0.15s",
-      width: hovered ? 36 : 20, height: hovered ? 36 : 20 }}>
-      <svg width="100%" height="100%" viewBox="0 0 36 36">
-        <circle cx="18" cy="18" r="16" fill="none" stroke={P.burg} strokeWidth="1" opacity={hovered ? 0.7 : 0.45} />
-        {!hovered && <circle cx="18" cy="18" r="2" fill={P.burg} opacity="0.5" />}
-      </svg>
-    </div>
-  );
-}
-
 function Sec({ id, children, bg }) {
   const [ref, vis] = useReveal();
   return (
@@ -438,7 +416,7 @@ export default function App() {
     const update = () => {
       const diff = wedding - new Date();
       const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-      document.title = diff > 0 ? `${days} days · Daniel & Edelys` : "Daniel & Edelys — July 31, 2026";
+      document.title = diff > 0 ? `${days} days · Daniel & Edelys` : "Daniel & Edelys - July 31, 2026";
     };
     update();
     const t = setInterval(update, 60000);
@@ -469,19 +447,16 @@ export default function App() {
     { date: "Feb 22, 2025", title: "First Conversation", text: "A simple message turned into something neither of us expected. God was already writing our story before we even knew it." },
     { date: "Mar 10, 2025", title: "First Hangout & Bible Study", text: "We opened the Word together for the first time. In that moment, it became clear this was more than just a friendship." },
     { date: "Mar 26, 2025", title: "Hearts Revealed", text: "We finally expressed what we'd been feeling. Honest, vulnerable, and certain that this was something worth pursuing." },
-    { date: "Apr 13, 2025", title: "Official \u2014 Palm Sunday", text: "On Palm Sunday, we made it official. A day that already carried so much meaning became the start of our journey together." },
-    { date: "Apr 19, 2025", title: "First Date \u2014 Patrona", text: "Our first real date at Patrona. Good food, better conversation, and a night we'll never forget." },
-    { date: "Feb 15, 2026", title: "The Proposal", text: "The day after Valentine\u2019s Day, Daniel asked Edelys to be his forever. With her parents\u2019 blessing and a heart full of certainty \u2014 she said yes." },
+    { date: "Apr 13, 2025", title: "Official - Palm Sunday", text: "On Palm Sunday, we made it official. A day that already carried so much meaning became the start of our journey together." },
+    { date: "Apr 19, 2025", title: "First Date - Patrona", text: "Our first real date at Patrona. Good food, better conversation, and a night we'll never forget." },
+    { date: "Feb 15, 2026", title: "The Proposal", text: "The day after Valentine's Day, Daniel asked Edelys to be his forever. With her parents' blessing and a heart full of certainty - she said yes." },
   ];
 
 
 
   return (
     <div style={{ background: P.bg, minHeight: "100vh", fontFamily: "'Lora', serif", color: P.ink }}>
-      {!isMobile && <CustomCursor />}
-      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
-      <style>{`* { box-sizing:border-box; margin:0; } html { scroll-behavior:smooth; } ::selection { background:${P.burgFa}; color:${P.ink}; } @media (hover:hover) { * { cursor:none !important; } }
-      @keyframes petalFall { 0% { transform: translateY(-20px) rotate(0deg) scale(0.8); opacity:0; } 10% { opacity:0.55; } 85% { opacity:0.35; } 100% { transform: translateY(105vh) rotate(420deg) scale(1); opacity:0; } }
+      <style>{`* { box-sizing:border-box; margin:0; } html { scroll-behavior:smooth; } ::selection { background:${P.burgFa}; color:${P.ink}; }      @keyframes petalFall { 0% { transform: translateY(-20px) rotate(0deg) scale(0.8); opacity:0; } 10% { opacity:0.55; } 85% { opacity:0.35; } 100% { transform: translateY(105vh) rotate(420deg) scale(1); opacity:0; } }
       @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } } @keyframes pulse { 0%,100% { opacity:0.6; } 50% { opacity:1; } }
       @keyframes confettiFall { 0% { transform: translateY(-10px) rotate(0deg); opacity:1; } 100% { transform: translateY(105vh) rotate(720deg); opacity:0; } }
       @keyframes drawLine { from { stroke-dashoffset: 400; } to { stroke-dashoffset: 0; } }`}</style>
