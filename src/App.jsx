@@ -583,7 +583,7 @@ export default function App() {
           <Head pre="Our Favorite People" title="The Wedding Party" />
           {[
             { side: "Groom's Side", members: [{ name:"Daniel Boyer", role:"Best Man" }, { name:"Emanuel Luciano", role:"Groomsman" }, { name:"Andrew Reyes", role:"Groomsman" }] },
-            { side: "Bride's Side", members: [{ name:"Yanalys Colon", role:"Maid of Honor" }, { name:"Gia Santiago", role:"Bridesmaid" }, { name:"Melanie Acevedo", role:"Bridesmaid" }] },
+            { side: "Bride's Side", members: [{ name:"Yanelys Colon", role:"Maid of Honor" }, { name:"Gia Santiago", role:"Bridesmaid" }, { name:"Melanie Acevedo", role:"Bridesmaid" }] },
           ].map(group => (
             <div key={group.side} style={{ textAlign: "center", marginBottom: 36 }}>
               <p style={{ fontFamily: "'Lora', serif", fontSize: 11, letterSpacing: 5, textTransform: "uppercase", color: P.sage, marginBottom: 22, fontWeight: 600 }}>{group.side}</p>
