@@ -327,12 +327,12 @@ function StaggerCard({ children, index, style }) {
 }
 
 function CalendarButton() {
-  const googleUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Daniel+%26+Edelys+Wedding&dates=20260731T140000Z/20260731T220000Z&details=Ceremony+at+Sarasota+County+Courthouse%2C+followed+by+Reception+at+Terra+Gaucha+Brazilian+Steakhouse%2C+Tampa.&location=2000+Main+Street%2C+Sarasota%2C+FL";
+  const googleUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Daniel+%26+Edelys+Wedding&dates=20260731T210000Z/20260801T010000Z&details=Reception+at+Terra+Gaucha+Brazilian+Steakhouse%2C+Tampa.+Ceremony+earlier+at+Sarasota+County+Courthouse+(contact+us+for+time).&location=Terra+Gaucha+Brazilian+Steakhouse%2C+Tampa%2C+FL";
   const downloadIcs = () => {
     const lines = [
       "BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Daniel & Edelys Wedding//EN",
       "CALSCALE:GREGORIAN","METHOD:PUBLISH","BEGIN:VEVENT",
-      "DTSTART:20260731T140000","DTEND:20260731T220000",
+      "DTSTART:20260731T170000","DTEND:20260731T210000",
       "SUMMARY:Daniel & Edelys Wedding",
       "LOCATION:2000 Main Street\, Sarasota\, FL",
       "DESCRIPTION:Ceremony at Sarasota County Courthouse. Reception at Terra Gaucha Brazilian Steakhouse\, Tampa.",
@@ -412,7 +412,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const wedding = new Date("2026-07-31T14:00:00");
+    const wedding = new Date("2026-07-31T00:00:00");
     const update = () => {
       const diff = wedding - new Date();
       const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
@@ -500,7 +500,7 @@ export default function App() {
             <p style={{ fontFamily: "'Lora', serif", fontSize: 14, letterSpacing: 4, textTransform: "uppercase", color: P.inkS, fontWeight: 500 }}>Request the pleasure of your company</p>
             <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontStyle: "italic", color: P.ink, marginTop: 20, fontWeight: 500 }}>Friday, the Thirty-First of July</p>
             <p style={{ fontFamily: "'Lora', serif", fontSize: 13, letterSpacing: 4, color: P.sage, marginTop: 6, fontWeight: 600 }}>Two Thousand Twenty-Six</p>
-            <Countdown date="2026-07-31T14:00:00" />
+            <Countdown date="2026-07-31T00:00:00" />
             <button onClick={() => go("rsvp")} style={{ marginTop: 44, padding: "14px 44px", fontFamily: "'Lora', serif", fontSize: 11, letterSpacing: 5, fontWeight: 600, textTransform: "uppercase", border: `1.5px solid ${P.burg}`, borderRadius: 0, cursor: "pointer", background: "transparent", color: P.burgDk }}>Kindly Respond</button>
           </div>
         </section>
@@ -553,9 +553,9 @@ export default function App() {
           <Head pre="The Celebration" title="Wedding Details" />
           <div style={{ display: "flex", gap: 24, flexWrap: "wrap", justifyContent: "center", maxWidth: 860 }}>
             {[
-              { icon: "courthouse", title: "The Ceremony", lines: ["Sarasota County Courthouse","2000 Main Street, Sarasota, FL","Friday, July 31, 2026","Two O'Clock in the Afternoon"], map: "https://maps.google.com/?q=2000+Main+Street+Sarasota+FL+34237" },
-              { icon: "flame", title: "The Celebration", lines: ["Terra Gaucha Brazilian Steakhouse","Tampa, Florida","Following the Ceremony","Dinner, Toasts & Dancing"], map: "https://maps.google.com/?q=Terra+Gaucha+Brazilian+Steakhouse+Tampa+FL" },
-              { icon: "diamond", title: "Dress Code", lines: ["Formal Attire","Anything but white","Dress to impress"] },
+              { icon: "courthouse", title: "The Ceremony", lines: ["Sarasota County Courthouse","2000 Main Street, Sarasota, FL","Friday, July 31, 2026","Contact us for time details"], map: "https://maps.google.com/?q=2000+Main+Street+Sarasota+FL+34237" },
+              { icon: "flame", title: "The Celebration", lines: ["Terra Gaucha Brazilian Steakhouse","Tampa, Florida","Five O'Clock in the Evening","Dinner, Toasts & Dancing"], map: "https://maps.google.com/?q=Terra+Gaucha+Brazilian+Steakhouse+Tampa+FL" },
+              { icon: "diamond", title: "Dress Code", lines: ["Formal Attire","Color Scheme: Burgundy & Olive","Anything but white or beige","Dress to impress"] },
             ].map((card, i) => (
               <StaggerCard key={card.title} index={i} style={{ textAlign: "center", padding: "36px 24px", background: P.ivory, border: `0.5px solid ${P.sageFa}`, borderRadius: 4, width: 250 }}>
                 <div style={{ marginBottom: 18 }}><Icon type={card.icon} size={30} /></div>
