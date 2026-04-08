@@ -750,6 +750,7 @@ export default function App() {
               { icon: "courthouse", title: "The Ceremony", lines: ["Sarasota County Courthouse","2000 Main Street, Sarasota, FL","Friday, July 31, 2026","Contact us for time details"], map: "https://maps.google.com/?q=2000+Main+Street+Sarasota+FL+34237" },
               { icon: "flame", title: "The Celebration", lines: ["Terra Gaucha Brazilian Steakhouse","Tampa, Florida","Five O'Clock in the Evening","Dinner, Toasts & Dancing"], map: "https://maps.google.com/?q=Terra+Gaucha+Brazilian+Steakhouse+Tampa+FL" },
               { icon: "diamond", title: "Dress Code", lines: ["Formal Attire","Color Scheme: Burgundy & Olive","Anything but white or beige","Dress to impress"] },
+              { icon: "heart", title: "Adults Only", lines: ["This is an adults-only celebration","We appreciate your understanding","Thank you for respecting our wishes"] },
             ].map((card, i) => (
               <StaggerCard key={card.title} index={i} style={{
                 textAlign: "center", padding: "clamp(24px,4vw,40px) clamp(16px,3vw,28px)",
@@ -777,6 +778,10 @@ export default function App() {
                 )}
               </StaggerCard>
             ))}
+          </div>
+          <div style={{ textAlign: "center", marginTop: 40, padding: "20px 32px", border: `1px solid ${P.goldFa}`, borderRadius: 4, maxWidth: 480, margin: "40px auto 0" }}>
+            <p style={{ fontFamily: "'Lora', serif", fontSize: "clamp(10px,2vw,11px)", letterSpacing: 4, textTransform: "uppercase", color: P.gold, fontWeight: 600, margin: "0 0 10px 0" }}>Please Note</p>
+            <p style={{ fontFamily: "'Lora', serif", fontSize: "clamp(12px,2.5vw,13.5px)", color: P.inkS, lineHeight: 1.85, margin: 0 }}>We kindly request an adults-only celebration. We appreciate your understanding and look forward to sharing this evening with you.</p>
           </div>
           <CalendarButton />
         </Sec>
