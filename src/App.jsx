@@ -787,7 +787,7 @@ export default function App() {
         <Sec id="party" bg={P.ivory}>
           <Head pre="Our Favorite People" title="The Wedding Party" />
           {[
-            { side: "Groom's Side", members: [{ name:"Daniel Boyer", role:"Best Man" }, { name:"Emanuel Luciano", role:"Groomsman" }, { name:"Andrew Reyes", role:"Groomsman" }] },
+            { side: "Groom's Side", members: [{ name:"Daniel Boyer", role:"Best Man" }, { name:"Emanuel Luciano", role:"Groomsman" }, { name:"Jaden Fish", role:"Groomsman" }] },
             { side: "Bride's Side", members: [{ name:"Yanelys Colon", role:"Maid of Honor" }, { name:"Gia Santiago", role:"Bridesmaid" }, { name:"Melanie Acevedo", role:"Bridesmaid" }] },
           ].map(group => (
             <div key={group.side} style={{ textAlign: "center", marginBottom: 44 }}>
