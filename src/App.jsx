@@ -1,13 +1,28 @@
 import { useState, useEffect, useRef } from "react";
 
-// Engagement photos
 const PHOTOS = {
-  hero: "/photo-hero.jpg",
-  story: "/photo-story.jpg",
-  proposal: "/photo-proposal.jpg",
-  ring: "/photo-ring.jpg",
-  sunset: "/photo-sunset.jpg",
+  hero:     { webp: "/photo-hero.webp",     jpg: "/photo-hero.jpg",     w: 1200, h: 800  },
+  story:    { webp: "/photo-story.webp",    jpg: "/photo-story.jpg",    w: 1200, h: 800  },
+  proposal: { webp: "/photo-proposal.webp", jpg: "/photo-proposal.jpg", w: 1200, h: 900  },
+  ring:     { webp: "/photo-ring.webp",     jpg: "/photo-ring.jpg",     w: 900,  h: 1200 },
+  sunset:   { webp: "/photo-sunset.webp",   jpg: "/photo-sunset.jpg",   w: 1200, h: 800  },
 };
+
+function Img({ photo, alt, style, eager }) {
+  return (
+    <picture>
+      <source srcSet={photo.webp} type="image/webp" />
+      <img
+        src={photo.jpg} alt={alt}
+        width={photo.w} height={photo.h}
+        loading={eager ? "eager" : "lazy"}
+        decoding={eager ? "sync" : "async"}
+        fetchPriority={eager ? "high" : "auto"}
+        style={{ display: "block", width: "100%", height: "auto", ...style }}
+      />
+    </picture>
+  );
+}
 
 const P = {
   bg: "#FAF7F4", ivory: "#FFF9F5", parch: "#F0EAE2",
@@ -262,7 +277,10 @@ function Envelope({ onOpen }) {
   return (
     <div onClick={go} style={{ position: "fixed", inset: 0, zIndex: 200, cursor: "pointer", overflow: "hidden" }}>
       {/* Tulip background */}
-      <img src="/Tulipanes.jpeg" alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 60%" }} />
+      <picture>
+        <source srcSet="/Tulipanes.webp" type="image/webp" />
+        <img src="/Tulipanes.jpeg" alt="" loading="eager" decoding="sync" fetchPriority="high" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 60%" }} />
+      </picture>
       <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(8,6,4,0.3) 0%, rgba(8,6,4,0.55) 100%)" }} />
       <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 50% 60%, transparent 30%, rgba(0,0,0,0.35) 100%)" }} />
 
@@ -683,7 +701,7 @@ export default function App() {
 
             {/* Hero photo */}
             <div style={{ margin: "28px auto", maxWidth: "clamp(260px, 70vw, 360px)", borderRadius: 6, overflow: "hidden", border: `1px solid ${P.goldFa}`, boxShadow: `0 12px 40px rgba(114,47,55,0.12), 0 4px 16px rgba(201,169,110,0.15)` }}>
-              <img src={PHOTOS.hero} alt="Daniel and Edelys" style={{ display: "block", width: "100%", height: "auto" }} />
+              <Img photo={PHOTOS.hero} alt="Daniel and Edelys" eager />
             </div>
 
             <p style={{ fontFamily: "'Lora', serif", fontSize: "clamp(11px,3vw,14px)", letterSpacing: 4, textTransform: "uppercase", color: P.inkS, fontWeight: 500, marginTop: 8 }}>Request the pleasure of your company</p>
@@ -701,7 +719,7 @@ export default function App() {
           <Head pre="The Beginning" title="Our Story" />
 
           <div style={{ margin: "0 auto 52px", maxWidth: "clamp(280px, 80vw, 500px)", borderRadius: 6, overflow: "hidden", border: `1px solid ${P.goldFa}`, boxShadow: `0 12px 40px rgba(114,47,55,0.1), 0 4px 16px rgba(201,169,110,0.12)` }}>
-            <img src={PHOTOS.story} alt="Daniel and Edelys laughing together" style={{ display: "block", width: "100%", height: "auto" }} />
+            <Img photo={PHOTOS.story} alt="Daniel and Edelys laughing together" />
           </div>
 
           <div style={{ maxWidth: 560, width: "100%", position: "relative" }}>
@@ -715,10 +733,10 @@ export default function App() {
                   <p style={{ fontFamily: "'Lora', serif", fontSize: "clamp(13px,3vw,13.5px)", color: P.inkS, lineHeight: 1.8 }}>{item.text}</p>
                   {i === 5 && (<>
                     <div style={{ marginTop: 18, borderRadius: 5, overflow: "hidden", border: `1px solid ${P.goldFa}` }}>
-                      <img src={PHOTOS.proposal} alt="The Proposal" style={{ display: "block", width: "100%", height: "auto" }} />
+                      <Img photo={PHOTOS.proposal} alt="The Proposal" />
                     </div>
                     {isMobile && <div style={{ marginTop: 12, borderRadius: 5, overflow: "hidden", border: `1px solid ${P.goldFa}` }}>
-                      <img src={PHOTOS.ring} alt="The Ring" style={{ display: "block", width: "100%", height: "auto" }} />
+                      <Img photo={PHOTOS.ring} alt="The Ring" />
                     </div>}
                   </>)}
                 </div>
@@ -726,7 +744,7 @@ export default function App() {
                 {!isMobile && <div style={{ width: "45%" }}>
                   {i === 5 && (
                     <div style={{ marginTop: 8, borderRadius: 5, overflow: "hidden", border: `1px solid ${P.goldFa}` }}>
-                      <img src={PHOTOS.ring} alt="The Ring" style={{ display: "block", width: "100%", height: "auto" }} />
+                      <Img photo={PHOTOS.ring} alt="The Ring" />
                     </div>
                   )}
                 </div>}
@@ -852,7 +870,7 @@ export default function App() {
         <Sec id="rsvp" bg={P.ivory}>
           <Head pre="We Hope You Can Make It" title="Kindly Respond" />
           <div style={{ margin: "0 auto 40px", maxWidth: "clamp(280px, 80vw, 520px)", borderRadius: 6, overflow: "hidden", border: `1px solid ${P.goldFa}`, boxShadow: `0 12px 40px rgba(114,47,55,0.1), 0 4px 16px rgba(201,169,110,0.1)` }}>
-            <img src={PHOTOS.sunset} alt="Daniel and Edelys at sunset" style={{ display: "block", width: "100%", height: "auto" }} />
+            <Img photo={PHOTOS.sunset} alt="Daniel and Edelys at sunset" />
           </div>
           <p style={{ textAlign: "center", maxWidth: 440, fontFamily: "'Lora', serif", fontSize: "clamp(13px,3vw,15px)", color: P.inkS, lineHeight: 1.85, marginBottom: 36 }}>
             Please let us know by June 30, 2026 so we can plan the perfect celebration.
